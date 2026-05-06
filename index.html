@@ -765,6 +765,9 @@
     .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
     .form-input:focus, .form-textarea:focus { border-color: rgba(0,245,255,0.3); box-shadow: 0 0 0 1px rgba(0,245,255,0.1), inset 0 0 20px rgba(0,245,255,0.02); }
     .form-textarea { min-height: 140px; }
+    .form-error { font-family: var(--font-mono); font-size: 11px; color: #f87171; letter-spacing: 1px; display: none; margin-top: 4px; }
+    .form-group.has-error .form-input, .form-group.has-error .form-textarea { border-color: rgba(248,113,113,0.5); }
+    .form-group.has-error .form-error { display: block; }
     .contact-info { display: flex; flex-direction: column; gap: 32px; }
     .contact-info-label { font-family: var(--font-mono); font-size: 11px; color: var(--neon-cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
     .contact-info-value { font-size: 15px; color: var(--text-primary); }
@@ -1434,11 +1437,13 @@
     <form id="contact-form" class="contact-form reveal reveal-delay-1" novalidate>
       <div class="form-group">
         <label class="form-label" data-i18n="contact.name.label">Nome</label>
-        <input type="text" name="name" class="form-input" placeholder="Il tuo nome" data-i18n-ph="contact.name.ph" required />
+        <input type="text" name="name" id="field-name" class="form-input" placeholder="Il tuo nome" data-i18n-ph="contact.name.ph" autocomplete="name" />
+        <div class="form-error" id="err-name" data-i18n="contact.err.name">Il nome è obbligatorio</div>
       </div>
       <div class="form-group">
         <label class="form-label" data-i18n="contact.email.label">Email</label>
-        <input type="email" name="email" class="form-input" placeholder="tua@email.com" data-i18n-ph="contact.email.ph" required />
+        <input type="email" name="email" id="field-email" class="form-input" placeholder="tua@email.com" data-i18n-ph="contact.email.ph" autocomplete="email" />
+        <div class="form-error" id="err-email" data-i18n="contact.err.email">Inserisci un’email valida</div>
       </div>
       <div class="form-group">
         <label class="form-label" data-i18n="contact.subject.label">Oggetto</label>
@@ -1776,6 +1781,8 @@ const i18n = {
     'contact.submit': 'Invia Messaggio',
     'contact.success': '\u2713 Messaggio inviato. Ti risponder\u00f2 presto!',
     'contact.channels': 'Canali diretti',
+    'contact.err.name': 'Il nome è obbligatorio',
+    'contact.err.email': 'Inserisci un’email valida',
     'contact.github.sub': 'Codice open & progetti',
     'contact.linkedin.sub': 'Profilo professionale',
     'footer.copy': '\u00a9 2025 Gianfranco Lavoratti \u2014 Built with precision.',
@@ -1841,6 +1848,8 @@ const i18n = {
     'contact.submit': 'Send Message',
     'contact.success': "\u2713 Message sent. I'll get back to you soon!",
     'contact.channels': 'Direct channels',
+    'contact.err.name': 'Name is required',
+    'contact.err.email': 'Enter a valid email',
     'contact.github.sub': 'Open code & projects',
     'contact.linkedin.sub': 'Professional profile',
     'footer.copy': '\u00a9 2025 Gianfranco Lavoratti \u2014 Built with precision.',
@@ -1879,6 +1888,32 @@ function toggleLang() {
 async function handleFormSubmit(e) {
   e.preventDefault();
   const form = e.currentTarget;
+
+  // Validazione campi obbligatori
+  const nameField = document.getElementById('field-name');
+  const emailField = document.getElementById('field-email');
+  const nameGroup = nameField.closest('.form-group');
+  const emailGroup = emailField.closest('.form-group');
+  let valid = true;
+
+  nameGroup.classList.remove('has-error');
+  emailGroup.classList.remove('has-error');
+
+  if (!nameField.value.trim()) {
+    nameGroup.classList.add('has-error');
+    document.getElementById('err-name').textContent =
+      currentLang === 'en' ? 'Name is required' : 'Il nome è obbligatorio';
+    valid = false;
+  }
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRe.test(emailField.value.trim())) {
+    emailGroup.classList.add('has-error');
+    document.getElementById('err-email').textContent =
+      currentLang === 'en' ? 'Enter a valid email' : 'Inserisci un’email valida';
+    valid = false;
+  }
+  if (!valid) return;
+
   const btn = form.querySelector('button[type="submit"]');
   const span = btn.querySelector('span');
   const orig = span.textContent;
