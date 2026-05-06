@@ -1547,15 +1547,19 @@ document.querySelectorAll('a, button, .project-card, .skill-badge, .expertise-ca
 });
 
 /* ─── LOADER ─── */
+function hideLoader() {
+  const loader = document.getElementById('loader');
+  if (loader) loader.classList.add('hidden');
+  document.body.style.overflow = 'auto';
+  window.scrollTo(0, 0);
+  startReveal();
+}
 window.addEventListener('load', () => {
   window.scrollTo(0, 0);
-  setTimeout(() => {
-    document.getElementById('loader').classList.add('hidden');
-    document.body.style.overflow = 'auto';
-    window.scrollTo(0, 0);
-    startReveal();
-  }, 2000);
+  setTimeout(hideLoader, 1800);
 });
+// Safety fallback: forza rimozione loader dopo 4s anche se load non scatta
+setTimeout(hideLoader, 4000);
 document.body.style.overflow = 'hidden';
 
 /* ─── NAV SCROLL ─── */
