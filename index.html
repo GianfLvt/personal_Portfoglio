@@ -275,7 +275,7 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
     .hero-name {
       font-family: var(--font-display);
-      font-size: clamp(52px, 9vw, 110px);
+      font-size: clamp(36px, 9vw, 110px);
       font-weight: 800;
       line-height: 0.95;
       letter-spacing: -2px;
@@ -828,6 +828,26 @@
     ::-webkit-scrollbar-thumb { background: rgba(0,245,255,0.2); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(0,245,255,0.4); }
 
+    /* ─── LANG TOGGLE ─── */
+    .lang-toggle {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: none;
+      border: 1px solid var(--border-subtle);
+      padding: 5px 12px;
+      cursor: none;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+      margin-right: 8px;
+    }
+    .lang-toggle:hover { color: var(--neon-cyan); border-color: rgba(0,245,255,0.3); }
+    .lang-toggle .l-active { color: var(--neon-cyan); font-weight: 700; }
+    .lang-toggle .l-sep { color: var(--text-muted); }
+
     /* ─── MOBILE ─── */
     @media (max-width: 900px) {
       .about-grid { grid-template-columns: 1fr; gap: 48px; }
@@ -842,8 +862,11 @@
     @media (max-width: 580px) {
       .stats-inner { grid-template-columns: 1fr 1fr; }
       .projects-grid { grid-template-columns: 1fr; }
-      .hero-name { letter-spacing: -1px; }
+      .hero-name { font-size: clamp(32px, 10vw, 52px); letter-spacing: -1px; }
       .skills-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 380px) {
+      .hero-name { font-size: clamp(28px, 9vw, 40px); letter-spacing: -0.5px; }
     }
   </style>
 </head>
@@ -870,7 +893,10 @@
     <li><a href="#techstack">Tech Stack</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">Hire Me</a>
+  <button class="lang-toggle" id="lang-btn" onclick="toggleLang()">
+    <span id="l-it" class="l-active">IT</span><span class="l-sep"> / </span><span id="l-en">EN</span>
+  </button>
+  <a href="#contact" class="nav-cta" data-i18n="nav.hire">Hire Me</a>
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -883,6 +909,9 @@
   <a href="#experience" onclick="closeMobile()">Expertise</a>
   <a href="#techstack" onclick="closeMobile()">Tech Stack</a>
   <a href="#contact" onclick="closeMobile()">Contact</a>
+  <button class="lang-toggle" onclick="toggleLang()" style="margin:0;width:fit-content;cursor:none">
+    <span id="l-it-mob" class="l-active">IT</span><span class="l-sep"> / </span><span id="l-en-mob">EN</span>
+  </button>
 </div>
 
 <!-- HERO -->
@@ -891,9 +920,9 @@
   <div class="hero-grid-overlay"></div>
   <div class="hero-content">
     <div class="hero-eyebrow reveal">
-      <span>Cybersecurity & Dev</span>
+      <span data-i18n="hero.eyebrow">Cybersecurity & Dev</span>
       <span class="blink">|</span>
-      <span style="color:var(--text-muted)">Italia</span>
+      <span style="color:var(--text-muted)" data-i18n="hero.location">Italia</span>
     </div>
     <h1 class="hero-name reveal reveal-delay-1">
       Gianfranco<br /><span class="accent">Lavoratti</span>
@@ -901,25 +930,25 @@
     <p class="hero-role reveal reveal-delay-2">
       <span id="typed-text"></span><span class="typed-cursor">_</span>
     </p>
-    <p class="hero-description reveal reveal-delay-3">
+    <p class="hero-description reveal reveal-delay-3" data-i18n="hero.desc">
       Appassionato di informatica, cybersecurity, networking, ethical hacking, automazione e sviluppo web moderno. Costruisco sistemi sicuri, scalabili e ad alte performance.
     </p>
     <div class="hero-ctas reveal reveal-delay-4">
-      <a href="#projects" class="btn-primary"><span>Scopri i miei progetti</span></a>
-      <a href="#contact" class="btn-secondary">Contattami</a>
+      <a href="#projects" class="btn-primary"><span data-i18n="hero.cta1">Scopri i miei progetti</span></a>
+      <a href="#contact" class="btn-secondary" data-i18n="hero.cta2">Contattami</a>
     </div>
     <div class="hero-stats reveal reveal-delay-4">
       <div class="hero-stat-item">
         <div class="stat-number"><span class="counter neon" data-target="5">0</span><span class="neon">+</span></div>
-        <div class="stat-label">Anni di esperienza</div>
+        <div class="stat-label" data-i18n="hero.stat1">Anni di esperienza</div>
       </div>
       <div class="hero-stat-item">
         <div class="stat-number"><span class="counter neon" data-target="15">0</span><span class="neon">+</span></div>
-        <div class="stat-label">Progetti completati</div>
+        <div class="stat-label" data-i18n="hero.stat2">Progetti completati</div>
       </div>
       <div class="hero-stat-item">
         <div class="stat-number"><span class="counter neon" data-target="50">0</span><span class="neon">+</span></div>
-        <div class="stat-label">Tool & Tecnologie</div>
+        <div class="stat-label" data-i18n="hero.stat3">Tool & Tecnologie</div>
       </div>
     </div>
   </div>
@@ -936,16 +965,16 @@
   <h2 class="section-title reveal reveal-delay-1">Sicurezza & Sviluppo.<br />Due facce della stessa competenza.</h2>
   <div class="about-grid">
     <div class="about-text reveal reveal-delay-2">
-      <p>Sono un <strong>Cybersecurity Specialist</strong> e <strong>Web Developer</strong> con una forte passione per la tecnologia in tutte le sue sfaccettature. La mia esperienza abbraccia il mondo della sicurezza informatica, con focus su threat analysis, vulnerability assessment, incident response e penetration testing.</p>
-      <p>Dal punto di vista dello sviluppo, costruisco applicazioni web moderne con un approccio <strong>security-first</strong>: architetture robuste, codice pulito, performance ottimizzate. Lavoro quotidianamente con stack enterprise-level e infrastrutture cloud/on-premise.</p>
-      <p>Opero in ambienti <strong>Linux e virtualizzati</strong>, gestisco infrastrutture di rete, automatizzando processi critici e mantenendo un focus costante su scalabilità e affidabilità dei sistemi.</p>
+      <p data-i18n-html="about.p1">Sono un <strong>Cybersecurity Specialist</strong> e <strong>Web Developer</strong> con una forte passione per la tecnologia in tutte le sue sfaccettature. La mia esperienza abbraccia il mondo della sicurezza informatica, con focus su threat analysis, vulnerability assessment, incident response e penetration testing.</p>
+      <p data-i18n-html="about.p2">Dal punto di vista dello sviluppo, costruisco applicazioni web moderne con un approccio <strong>security-first</strong>: architetture robuste, codice pulito, performance ottimizzate. Lavoro quotidianamente con stack enterprise-level e infrastrutture cloud/on-premise.</p>
+      <p data-i18n-html="about.p3">Opero in ambienti <strong>Linux e virtualizzati</strong>, gestisco infrastrutture di rete, automatizzando processi critici e mantenendo un focus costante su scalabilità e affidabilità dei sistemi.</p>
       <div class="current-focus">
         <div class="focus-label"><div class="focus-dot"></div>Current Focus</div>
-        <div class="focus-text">SOC operations, threat intelligence, advanced pentesting labs e sviluppo di tool di automazione per la sicurezza informatica in ambienti enterprise.</div>
+        <div class="focus-text" data-i18n="about.focus.text">SOC operations, threat intelligence, advanced pentesting labs e sviluppo di tool di automazione per la sicurezza informatica in ambienti enterprise.</div>
       </div>
     </div>
     <div class="reveal reveal-delay-3">
-      <div class="section-label" style="margin-bottom:20px">Skills & Tecnologie</div>
+      <div class="section-label" style="margin-bottom:20px" data-i18n="about.skills">Skills & Tecnologie</div>
       <div class="skills-grid">
         <div class="skill-badge">
           <span class="skill-icon">🟢</span><span>Vue.js</span>
@@ -1025,19 +1054,19 @@
   <div class="stats-inner">
     <div class="stat-block reveal">
       <div class="stat-num"><span class="counter" data-target="5">0</span><span class="cyan">+</span></div>
-      <div class="stat-desc">Anni nell'IT</div>
+      <div class="stat-desc" data-i18n="stat.it">Anni nell'IT</div>
     </div>
     <div class="stat-block reveal reveal-delay-1">
       <div class="stat-num"><span class="counter" data-target="200">0</span><span class="cyan">+</span></div>
-      <div class="stat-desc">Vulnerabilità analizzate</div>
+      <div class="stat-desc" data-i18n="stat.vulns">Vulnerabilità analizzate</div>
     </div>
     <div class="stat-block reveal reveal-delay-2">
       <div class="stat-num"><span class="counter" data-target="15">0</span><span class="cyan">+</span></div>
-      <div class="stat-desc">Progetti Web</div>
+      <div class="stat-desc" data-i18n="stat.projects">Progetti Web</div>
     </div>
     <div class="stat-block reveal reveal-delay-3">
       <div class="stat-num"><span class="counter" data-target="99">0</span><span class="cyan">%</span></div>
-      <div class="stat-desc">Uptime target</div>
+      <div class="stat-desc" data-i18n="stat.uptime">Uptime target</div>
     </div>
   </div>
 </div>
@@ -1047,8 +1076,8 @@
 <!-- PROJECTS -->
 <section id="projects">
   <div class="section-label reveal">Portfolio</div>
-  <h2 class="section-title reveal reveal-delay-1">Progetti<br /><span style="color:var(--text-secondary);font-weight:400">selezionati.</span></h2>
-  <p class="section-subtitle reveal reveal-delay-2">Applicazioni web reali, costruite con cura per performance, design e affidabilità.</p>
+  <h2 class="section-title reveal reveal-delay-1" data-i18n-html="projects.title">Progetti<br /><span style="color:var(--text-secondary);font-weight:400">selezionati.</span></h2>
+  <p class="section-subtitle reveal reveal-delay-2" data-i18n="projects.subtitle">Applicazioni web reali, costruite con cura per performance, design e affidabilità.</p>
   <div class="projects-grid">
 
     <!-- Project 1: JoinMee -->
@@ -1077,7 +1106,7 @@
           <span class="pf-domain" style="position:relative;z-index:1">joinmee.it</span>
         </div>
         <div class="project-preview-overlay">
-          <a href="https://joinmee.it" target="_blank" rel="noopener" class="preview-visit-btn">Visita Progetto</a>
+          <a href="https://joinmee.it" target="_blank" rel="noopener" class="preview-visit-btn" data-i18n="proj.visit">Visita Progetto</a>
         </div>
       </div>
       <div class="project-info">
@@ -1086,14 +1115,14 @@
           <span class="project-domain">joinmee.it</span>
         </div>
         <div class="project-title">JoinMee</div>
-        <p class="project-desc">Piattaforma web moderna per connettere persone e organizzare esperienze condivise. UI fluida, UX curata, architettura scalabile.</p>
+        <p class="project-desc" data-i18n="proj1.desc">Piattaforma web moderna per connettere persone e organizzare esperienze condivise. UI fluida, UX curata, architettura scalabile.</p>
         <div class="project-stack">
           <span class="stack-tag">Vue.js</span>
           <span class="stack-tag">TailwindCSS</span>
           <span class="stack-tag">Node.js</span>
           <span class="stack-tag">API REST</span>
         </div>
-        <a href="https://joinmee.it" target="_blank" rel="noopener" class="project-link">Visita il progetto</a>
+        <a href="https://joinmee.it" target="_blank" rel="noopener" class="project-link" data-i18n="proj.link">Visita il progetto</a>
       </div>
     </div>
 
@@ -1123,7 +1152,7 @@
           <span class="pf-domain" style="position:relative;z-index:1">teamswork.it</span>
         </div>
         <div class="project-preview-overlay">
-          <a href="https://teamswork.it" target="_blank" rel="noopener" class="preview-visit-btn">Visita Progetto</a>
+          <a href="https://teamswork.it" target="_blank" rel="noopener" class="preview-visit-btn" data-i18n="proj.visit">Visita Progetto</a>
         </div>
       </div>
       <div class="project-info">
@@ -1132,14 +1161,14 @@
           <span class="project-domain">teamswork.it</span>
         </div>
         <div class="project-title">TeamsWork</div>
-        <p class="project-desc">Soluzione per team management e collaborazione aziendale. Interfaccia professionale, gestione utenti avanzata, dashboard intuitive.</p>
+        <p class="project-desc" data-i18n="proj2.desc">Soluzione per team management e collaborazione aziendale. Interfaccia professionale, gestione utenti avanzata, dashboard intuitive.</p>
         <div class="project-stack">
           <span class="stack-tag">Vue 3</span>
           <span class="stack-tag">Python</span>
           <span class="stack-tag">FastAPI</span>
           <span class="stack-tag">Docker</span>
         </div>
-        <a href="https://teamswork.it" target="_blank" rel="noopener" class="project-link">Visita il progetto</a>
+        <a href="https://teamswork.it" target="_blank" rel="noopener" class="project-link" data-i18n="proj.link">Visita il progetto</a>
       </div>
     </div>
 
@@ -1169,7 +1198,7 @@
           <span class="pf-domain" style="position:relative;z-index:1">giuseppevero.it</span>
         </div>
         <div class="project-preview-overlay">
-          <a href="https://giuseppevero.it" target="_blank" rel="noopener" class="preview-visit-btn">Visita Progetto</a>
+          <a href="https://giuseppevero.it" target="_blank" rel="noopener" class="preview-visit-btn" data-i18n="proj.visit">Visita Progetto</a>
         </div>
       </div>
       <div class="project-info">
@@ -1178,14 +1207,14 @@
           <span class="project-domain">giuseppevero.it</span>
         </div>
         <div class="project-title">GiuseppeVero.it</div>
-        <p class="project-desc">Portfolio e presenza digitale professionale. Design elegante, ottimizzazione SEO avanzata, performance Lighthouse elevate e UX premium.</p>
+        <p class="project-desc" data-i18n="proj3.desc">Portfolio e presenza digitale professionale. Design elegante, ottimizzazione SEO avanzata, performance Lighthouse elevate e UX premium.</p>
         <div class="project-stack">
           <span class="stack-tag">HTML5</span>
           <span class="stack-tag">CSS3</span>
           <span class="stack-tag">JavaScript</span>
           <span class="stack-tag">SEO</span>
         </div>
-        <a href="https://giuseppevero.it" target="_blank" rel="noopener" class="project-link">Visita il progetto</a>
+        <a href="https://giuseppevero.it" target="_blank" rel="noopener" class="project-link" data-i18n="proj.link">Visita il progetto</a>
       </div>
     </div>
 
@@ -1197,14 +1226,14 @@
 <!-- EXPERIENCE / EXPERTISE -->
 <section id="experience">
   <div class="section-label reveal">Expertise</div>
-  <h2 class="section-title reveal reveal-delay-1">Cosa so fare<br /><span style="color:var(--neon-cyan)">davvero bene.</span></h2>
-  <p class="section-subtitle reveal reveal-delay-2">Un profilo ibrido tra sicurezza offensiva, sviluppo moderno e gestione infrastrutturale.</p>
+  <h2 class="section-title reveal reveal-delay-1" data-i18n-html="exp.title">Cosa so fare<br /><span style="color:var(--neon-cyan)">davvero bene.</span></h2>
+  <p class="section-subtitle reveal reveal-delay-2" data-i18n="exp.subtitle">Un profilo ibrido tra sicurezza offensiva, sviluppo moderno e gestione infrastrutturale.</p>
   <div class="expertise-grid">
 
     <div class="expertise-card reveal">
       <span class="exp-icon">🛡️</span>
-      <div class="exp-title">Cybersecurity & SOC</div>
-      <p class="exp-desc">Threat analysis, incident response, SIEM monitoring, vulnerability assessment e gestione degli alert in ambienti enterprise. Esperienza diretta in contesti sanitari e pubblici ad alta criticità.</p>
+      <div class="exp-title" data-i18n="exp1.title">Cybersecurity & SOC</div>
+      <p class="exp-desc" data-i18n="exp1.desc">Threat analysis, incident response, SIEM monitoring, vulnerability assessment e gestione degli alert in ambienti enterprise. Esperienza diretta in contesti sanitari e pubblici ad alta criticità.</p>
       <div class="exp-tags">
         <span class="exp-tag">SIEM</span><span class="exp-tag">IDS/IPS</span><span class="exp-tag">DFIR</span><span class="exp-tag">Threat Intel</span>
       </div>
@@ -1212,8 +1241,8 @@
 
     <div class="expertise-card reveal reveal-delay-1">
       <span class="exp-icon">🎯</span>
-      <div class="exp-title">Ethical Hacking & Pentesting</div>
-      <p class="exp-desc">Penetration testing web e network, OWASP metodology, analisi di applicazioni web, exploitation e reporting professionale. Uso di tool avanzati su piattaforme Kali Linux.</p>
+      <div class="exp-title" data-i18n="exp2.title">Ethical Hacking & Pentesting</div>
+      <p class="exp-desc" data-i18n="exp2.desc">Penetration testing web e network, OWASP metodology, analisi di applicazioni web, exploitation e reporting professionale. Uso di tool avanzati su piattaforme Kali Linux.</p>
       <div class="exp-tags">
         <span class="exp-tag">Burp Suite</span><span class="exp-tag">Metasploit</span><span class="exp-tag">nmap</span><span class="exp-tag">OWASP</span>
       </div>
@@ -1221,8 +1250,8 @@
 
     <div class="expertise-card reveal reveal-delay-2">
       <span class="exp-icon">⚡</span>
-      <div class="exp-title">Web Development</div>
-      <p class="exp-desc">Sviluppo fullstack con Vue 3, Python/FastAPI, architetture RESTful e microservizi. Focus su codice pulito, performance, sicurezza applicativa e design system enterprise.</p>
+      <div class="exp-title" data-i18n="exp3.title">Web Development</div>
+      <p class="exp-desc" data-i18n="exp3.desc">Sviluppo fullstack con Vue 3, Python/FastAPI, architetture RESTful e microservizi. Focus su codice pulito, performance, sicurezza applicativa e design system enterprise.</p>
       <div class="exp-tags">
         <span class="exp-tag">Vue 3</span><span class="exp-tag">FastAPI</span><span class="exp-tag">TypeScript</span><span class="exp-tag">REST</span>
       </div>
@@ -1230,8 +1259,8 @@
 
     <div class="expertise-card reveal reveal-delay-3">
       <span class="exp-icon">🌐</span>
-      <div class="exp-title">Networking & Infrastrutture</div>
-      <p class="exp-desc">Progettazione e gestione di reti aziendali, configurazione firewall, VPN, routing e switching. Analisi del traffico, troubleshooting avanzato e sicurezza perimetrale.</p>
+      <div class="exp-title" data-i18n="exp4.title">Networking & Infrastrutture</div>
+      <p class="exp-desc" data-i18n="exp4.desc">Progettazione e gestione di reti aziendali, configurazione firewall, VPN, routing e switching. Analisi del traffico, troubleshooting avanzato e sicurezza perimetrale.</p>
       <div class="exp-tags">
         <span class="exp-tag">TCP/IP</span><span class="exp-tag">VPN</span><span class="exp-tag">Firewall</span><span class="exp-tag">Wireshark</span>
       </div>
@@ -1239,8 +1268,8 @@
 
     <div class="expertise-card reveal">
       <span class="exp-icon">🐧</span>
-      <div class="exp-title">Linux & Virtualizzazione</div>
-      <p class="exp-desc">Amministrazione avanzata Linux (Kali, Ubuntu, Debian), gestione ambienti virtualizzati VMware, configurazione headless server, automazione con bash e systemd.</p>
+      <div class="exp-title" data-i18n="exp5.title">Linux & Virtualizzazione</div>
+      <p class="exp-desc" data-i18n="exp5.desc">Amministrazione avanzata Linux (Kali, Ubuntu, Debian), gestione ambienti virtualizzati VMware, configurazione headless server, automazione con bash e systemd.</p>
       <div class="exp-tags">
         <span class="exp-tag">Kali Linux</span><span class="exp-tag">VMware</span><span class="exp-tag">Bash</span><span class="exp-tag">Systemd</span>
       </div>
@@ -1248,8 +1277,8 @@
 
     <div class="expertise-card reveal reveal-delay-1">
       <span class="exp-icon">🤖</span>
-      <div class="exp-title">Automazione & DevOps</div>
-      <p class="exp-desc">Pipeline CI/CD, containerizzazione con Docker, scripting Python avanzato, integrazione di AI e LLM in workflow aziendali, automazione di processi SOC e sviluppo.</p>
+      <div class="exp-title" data-i18n="exp6.title">Automazione & DevOps</div>
+      <p class="exp-desc" data-i18n="exp6.desc">Pipeline CI/CD, containerizzazione con Docker, scripting Python avanzato, integrazione di AI e LLM in workflow aziendali, automazione di processi SOC e sviluppo.</p>
       <div class="exp-tags">
         <span class="exp-tag">Docker</span><span class="exp-tag">Python</span><span class="exp-tag">CI/CD</span><span class="exp-tag">AI/LLM</span>
       </div>
@@ -1257,8 +1286,8 @@
 
     <div class="expertise-card reveal reveal-delay-2">
       <span class="exp-icon">🔍</span>
-      <div class="exp-title">OSINT & Recon</div>
-      <p class="exp-desc">Ricognizione open source, intelligence gathering, footprinting di target, analisi di asset digitali esposti. Tool specializzati: subfinder, httpx, nuclei, theHarvester.</p>
+      <div class="exp-title" data-i18n="exp7.title">OSINT & Recon</div>
+      <p class="exp-desc" data-i18n="exp7.desc">Ricognizione open source, intelligence gathering, footprinting di target, analisi di asset digitali esposti. Tool specializzati: subfinder, httpx, nuclei, theHarvester.</p>
       <div class="exp-tags">
         <span class="exp-tag">OSINT</span><span class="exp-tag">subfinder</span><span class="exp-tag">nuclei</span><span class="exp-tag">Recon</span>
       </div>
@@ -1266,8 +1295,8 @@
 
     <div class="expertise-card reveal reveal-delay-3">
       <span class="exp-icon">🔬</span>
-      <div class="exp-title">Reverse Engineering</div>
-      <p class="exp-desc">Analisi binaria con x64dbg, disassembly, patching, comprensione di formati proprietari e analisi malware statica. Background in forensics digitale e analisi di incidenti.</p>
+      <div class="exp-title" data-i18n="exp8.title">Reverse Engineering</div>
+      <p class="exp-desc" data-i18n="exp8.desc">Analisi binaria con x64dbg, disassembly, patching, comprensione di formati proprietari e analisi malware statica. Background in forensics digitale e analisi di incidenti.</p>
       <div class="exp-tags">
         <span class="exp-tag">x64dbg</span><span class="exp-tag">Ghidra</span><span class="exp-tag">Forensics</span><span class="exp-tag">Malware</span>
       </div>
@@ -1300,7 +1329,7 @@
 <section id="techstack">
   <div class="section-label reveal">Arsenal</div>
   <h2 class="section-title reveal reveal-delay-1">Tech Stack</h2>
-  <p class="section-subtitle reveal reveal-delay-2">Gli strumenti con cui lavoro ogni giorno, dal frontend alla sicurezza offensiva.</p>
+  <p class="section-subtitle reveal reveal-delay-2" data-i18n="tech.subtitle">Gli strumenti con cui lavoro ogni giorno, dal frontend alla sicurezza offensiva.</p>
   <div class="tech-categories reveal reveal-delay-3">
 
     <div class="tech-category">
@@ -1398,37 +1427,37 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-label reveal">Contatti</div>
-  <h2 class="section-title reveal reveal-delay-1">Parliamo di<br /><span style="color:var(--neon-cyan)">un progetto.</span></h2>
-  <p class="section-subtitle reveal reveal-delay-2">Disponibile per collaborazioni in ambito cybersecurity, sviluppo web e consulenza IT. Rispondi entro 24h.</p>
+  <div class="section-label reveal" data-i18n="contact.label">Contatti</div>
+  <h2 class="section-title reveal reveal-delay-1" data-i18n-html="contact.title">Parliamo di<br /><span style="color:var(--neon-cyan)">un progetto.</span></h2>
+  <p class="section-subtitle reveal reveal-delay-2" data-i18n="contact.subtitle">Disponibile per collaborazioni in ambito cybersecurity, sviluppo web e consulenza IT. Rispondi entro 24h.</p>
   <div class="contact-grid">
-    <div class="contact-form reveal reveal-delay-1">
+    <form id="contact-form" class="contact-form reveal reveal-delay-1" novalidate>
       <div class="form-group">
-        <label class="form-label">Nome</label>
-        <input type="text" class="form-input" placeholder="Il tuo nome" />
+        <label class="form-label" data-i18n="contact.name.label">Nome</label>
+        <input type="text" name="name" class="form-input" placeholder="Il tuo nome" data-i18n-ph="contact.name.ph" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" placeholder="tua@email.com" />
+        <label class="form-label" data-i18n="contact.email.label">Email</label>
+        <input type="email" name="email" class="form-input" placeholder="tua@email.com" data-i18n-ph="contact.email.ph" required />
       </div>
       <div class="form-group">
-        <label class="form-label">Oggetto</label>
-        <input type="text" class="form-input" placeholder="Collaborazione / Consulenza / Progetto" />
+        <label class="form-label" data-i18n="contact.subject.label">Oggetto</label>
+        <input type="text" name="subject" class="form-input" placeholder="Collaborazione / Consulenza / Progetto" data-i18n-ph="contact.subject.ph" />
       </div>
       <div class="form-group">
-        <label class="form-label">Messaggio</label>
-        <textarea class="form-textarea" placeholder="Descrivi brevemente il tuo progetto o la tua richiesta..."></textarea>
+        <label class="form-label" data-i18n="contact.msg.label">Messaggio</label>
+        <textarea name="message" class="form-textarea" placeholder="Descrivi brevemente il tuo progetto o la tua richiesta..." data-i18n-ph="contact.msg.ph" required></textarea>
       </div>
-      <button class="btn-primary" onclick="handleFormSubmit(event)" style="align-self:flex-start;border:none;cursor:none">
-        <span>Invia Messaggio</span>
+      <button type="submit" class="btn-primary" style="align-self:flex-start;border:none;cursor:none">
+        <span data-i18n="contact.submit">Invia Messaggio</span>
       </button>
-      <div id="form-success" style="display:none;font-family:var(--font-mono);font-size:12px;color:#4ade80;padding:12px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);letter-spacing:1px">
+      <div id="form-success" style="display:none;font-family:var(--font-mono);font-size:12px;color:#4ade80;padding:12px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);letter-spacing:1px" data-i18n="contact.success">
         ✓ Messaggio inviato. Ti risponderò presto!
       </div>
-    </div>
+    </form>
     <div class="contact-info reveal reveal-delay-2">
       <div>
-        <div class="contact-info-label">Canali diretti</div>
+        <div class="contact-info-label" data-i18n="contact.channels">Canali diretti</div>
         <div class="social-links">
           <a href="https://wa.me/393923149204" target="_blank" rel="noopener" class="social-link">
             <span class="social-link-icon">💬</span>
@@ -1450,7 +1479,7 @@
             <span class="social-link-icon">🐙</span>
             <div>
               <div style="font-size:12px;color:var(--text-primary);margin-bottom:2px">GitHub</div>
-              <div style="font-size:11px;color:var(--text-muted)">Codice open & progetti</div>
+              <div style="font-size:11px;color:var(--text-muted)" data-i18n="contact.github.sub">Codice open & progetti</div>
             </div>
             <span class="social-link-arrow">→</span>
           </a>
@@ -1458,7 +1487,7 @@
             <span class="social-link-icon">💼</span>
             <div>
               <div style="font-size:12px;color:var(--text-primary);margin-bottom:2px">LinkedIn</div>
-              <div style="font-size:11px;color:var(--text-muted)">Profilo professionale</div>
+              <div style="font-size:11px;color:var(--text-muted)" data-i18n="contact.linkedin.sub">Profilo professionale</div>
             </div>
             <span class="social-link-arrow">→</span>
           </a>
@@ -1488,7 +1517,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">&gt;_ <span>gl</span>.portfolio</div>
-    <div class="footer-copy" style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">
+    <div class="footer-copy" style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)" data-i18n="footer.copy">
       © 2025 Gianfranco Lavoratti — Built with precision.
     </div>
     <div class="footer-links">
@@ -1677,18 +1706,198 @@ function animCanvas() {
 }
 animCanvas();
 
-/* ─── FORM ─── */
-function handleFormSubmit(e) {
-  e.preventDefault();
-  const btn = e.target;
-  const span = btn.querySelector('span');
-  span.textContent = 'Invio in corso...';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.style.display = 'none';
-    document.getElementById('form-success').style.display = 'block';
-  }, 1200);
+/* ─── I18N ─── */
+let currentLang = 'it';
+const i18n = {
+  it: {
+    'nav.hire': 'Hire Me',
+    'hero.eyebrow': 'Cybersecurity & Dev',
+    'hero.location': 'Italia',
+    'hero.desc': 'Appassionato di informatica, cybersecurity, networking, ethical hacking, automazione e sviluppo web moderno. Costruisco sistemi sicuri, scalabili e ad alte performance.',
+    'hero.cta1': 'Scopri i miei progetti',
+    'hero.cta2': 'Contattami',
+    'hero.stat1': 'Anni di esperienza',
+    'hero.stat2': 'Progetti completati',
+    'hero.stat3': 'Tool & Tecnologie',
+    'about.label': 'Chi sono',
+    'about.title': 'Sicurezza & Sviluppo.<br /><span style="color:var(--text-secondary);font-weight:400">Due facce della stessa competenza.</span>',
+    'about.p1': 'Sono un <strong>Cybersecurity Specialist</strong> e <strong>Web Developer</strong> con una forte passione per la tecnologia in tutte le sue sfaccettature. La mia esperienza abbraccia il mondo della sicurezza informatica, con focus su threat analysis, vulnerability assessment, incident response e penetration testing.',
+    'about.p2': 'Dal punto di vista dello sviluppo, costruisco applicazioni web moderne con un approccio <strong>security-first</strong>: architetture robuste, codice pulito, performance ottimizzate. Lavoro quotidianamente con stack enterprise-level e infrastrutture cloud/on-premise.',
+    'about.p3': 'Opero in ambienti <strong>Linux e virtualizzati</strong>, gestisco infrastrutture di rete, automatizzando processi critici e mantenendo un focus costante su scalabilità e affidabilità dei sistemi.',
+    'about.focus.text': 'SOC operations, threat intelligence, advanced pentesting labs e sviluppo di tool di automazione per la sicurezza informatica in ambienti enterprise.',
+    'about.skills': 'Skills & Tecnologie',
+    'stat.it': "Anni nell'IT",
+    'stat.vulns': 'Vulnerabilità analizzate',
+    'stat.projects': 'Progetti Web',
+    'stat.uptime': 'Uptime target',
+    'projects.title': 'Progetti<br /><span style="color:var(--text-secondary);font-weight:400">selezionati.</span>',
+    'projects.subtitle': 'Applicazioni web reali, costruite con cura per performance, design e affidabilità.',
+    'proj1.desc': 'Piattaforma web moderna per connettere persone e organizzare esperienze condivise. UI fluida, UX curata, architettura scalabile.',
+    'proj2.desc': 'Soluzione per team management e collaborazione aziendale. Interfaccia professionale, gestione utenti avanzata, dashboard intuitive.',
+    'proj3.desc': 'Portfolio e presenza digitale professionale. Design elegante, ottimizzazione SEO avanzata, performance Lighthouse elevate e UX premium.',
+    'proj.visit': 'Visita Progetto',
+    'proj.link': 'Visita il progetto',
+    'exp.title': 'Cosa so fare<br /><span style="color:var(--neon-cyan)">davvero bene.</span>',
+    'exp.subtitle': 'Un profilo ibrido tra sicurezza offensiva, sviluppo moderno e gestione infrastrutturale.',
+    'exp1.title': 'Cybersecurity & SOC',
+    'exp1.desc': 'Threat analysis, incident response, SIEM monitoring, vulnerability assessment e gestione degli alert in ambienti enterprise. Esperienza diretta in contesti sanitari e pubblici ad alta criticità.',
+    'exp2.title': 'Ethical Hacking & Pentesting',
+    'exp2.desc': 'Penetration testing web e network, OWASP metodology, analisi di applicazioni web, exploitation e reporting professionale. Uso di tool avanzati su piattaforme Kali Linux.',
+    'exp3.title': 'Web Development',
+    'exp3.desc': 'Sviluppo fullstack con Vue 3, Python/FastAPI, architetture RESTful e microservizi. Focus su codice pulito, performance, sicurezza applicativa e design system enterprise.',
+    'exp4.title': 'Networking & Infrastrutture',
+    'exp4.desc': 'Progettazione e gestione di reti aziendali, configurazione firewall, VPN, routing e switching. Analisi del traffico, troubleshooting avanzato e sicurezza perimetrale.',
+    'exp5.title': 'Linux & Virtualizzazione',
+    'exp5.desc': 'Amministrazione avanzata Linux (Kali, Ubuntu, Debian), gestione ambienti virtualizzati VMware, configurazione headless server, automazione con bash e systemd.',
+    'exp6.title': 'Automazione & DevOps',
+    'exp6.desc': 'Pipeline CI/CD, containerizzazione con Docker, scripting Python avanzato, integrazione di AI e LLM in workflow aziendali, automazione di processi SOC e sviluppo.',
+    'exp7.title': 'OSINT & Recon',
+    'exp7.desc': 'Ricognizione open source, intelligence gathering, footprinting di target, analisi di asset digitali esposti. Tool specializzati: subfinder, httpx, nuclei, theHarvester.',
+    'exp8.title': 'Reverse Engineering',
+    'exp8.desc': 'Analisi binaria con x64dbg, disassembly, patching, comprensione di formati proprietari e analisi malware statica. Background in forensics digitale e analisi di incidenti.',
+    'tech.subtitle': 'Gli strumenti con cui lavoro ogni giorno, dal frontend alla sicurezza offensiva.',
+    'contact.label': 'Contatti',
+    'contact.title': 'Parliamo di<br /><span style="color:var(--neon-cyan)">un progetto.</span>',
+    'contact.subtitle': 'Disponibile per collaborazioni in ambito cybersecurity, sviluppo web e consulenza IT. Rispondi entro 24h.',
+    'contact.name.label': 'Nome',
+    'contact.name.ph': 'Il tuo nome',
+    'contact.email.label': 'Email',
+    'contact.email.ph': 'tua@email.com',
+    'contact.subject.label': 'Oggetto',
+    'contact.subject.ph': 'Collaborazione / Consulenza / Progetto',
+    'contact.msg.label': 'Messaggio',
+    'contact.msg.ph': 'Descrivi brevemente il tuo progetto o la tua richiesta...',
+    'contact.submit': 'Invia Messaggio',
+    'contact.success': '\u2713 Messaggio inviato. Ti risponder\u00f2 presto!',
+    'contact.channels': 'Canali diretti',
+    'contact.github.sub': 'Codice open & progetti',
+    'contact.linkedin.sub': 'Profilo professionale',
+    'footer.copy': '\u00a9 2025 Gianfranco Lavoratti \u2014 Built with precision.',
+  },
+  en: {
+    'nav.hire': 'Hire Me',
+    'hero.eyebrow': 'Cybersecurity & Dev',
+    'hero.location': 'Italy',
+    'hero.desc': 'Passionate about technology, cybersecurity, networking, ethical hacking, automation and modern web development. I build secure, scalable, high-performance systems.',
+    'hero.cta1': 'View my projects',
+    'hero.cta2': 'Contact me',
+    'hero.stat1': 'Years of experience',
+    'hero.stat2': 'Completed projects',
+    'hero.stat3': 'Tools & Technologies',
+    'about.label': 'About me',
+    'about.title': 'Security & Development.<br /><span style="color:var(--text-secondary);font-weight:400">Two sides of the same expertise.</span>',
+    'about.p1': 'I am a <strong>Cybersecurity Specialist</strong> and <strong>Web Developer</strong> with a strong passion for technology in all its facets. My experience spans the world of information security, with focus on threat analysis, vulnerability assessment, incident response and penetration testing.',
+    'about.p2': 'From a development standpoint, I build modern web applications with a <strong>security-first</strong> approach: robust architectures, clean code, optimized performance. I work daily with enterprise-level stacks and cloud/on-premise infrastructures.',
+    'about.p3': 'I operate in <strong>Linux and virtualized environments</strong>, manage network infrastructures, automate critical processes and maintain a constant focus on system scalability and reliability.',
+    'about.focus.text': 'SOC operations, threat intelligence, advanced pentesting labs and development of automation tools for information security in enterprise environments.',
+    'about.skills': 'Skills & Technologies',
+    'stat.it': 'Years in IT',
+    'stat.vulns': 'Vulnerabilities analyzed',
+    'stat.projects': 'Web Projects',
+    'stat.uptime': 'Uptime target',
+    'projects.title': 'Selected<br /><span style="color:var(--text-secondary);font-weight:400">projects.</span>',
+    'projects.subtitle': 'Real web applications, built with care for performance, design and reliability.',
+    'proj1.desc': 'Modern web platform to connect people and organize shared experiences. Fluid UI, refined UX, scalable architecture.',
+    'proj2.desc': 'Solution for team management and corporate collaboration. Professional interface, advanced user management, intuitive dashboards.',
+    'proj3.desc': 'Professional portfolio and digital presence. Elegant design, advanced SEO optimization, high Lighthouse performance and premium UX.',
+    'proj.visit': 'Visit Project',
+    'proj.link': 'Visit project',
+    'exp.title': 'What I do<br /><span style="color:var(--neon-cyan)">really well.</span>',
+    'exp.subtitle': 'A hybrid profile between offensive security, modern development and infrastructure management.',
+    'exp1.title': 'Cybersecurity & SOC',
+    'exp1.desc': 'Threat analysis, incident response, SIEM monitoring, vulnerability assessment and alert management in enterprise environments. Direct experience in high-criticality healthcare and public sector contexts.',
+    'exp2.title': 'Ethical Hacking & Pentesting',
+    'exp2.desc': 'Web and network penetration testing, OWASP methodology, web application analysis, exploitation and professional reporting. Use of advanced tools on Kali Linux platforms.',
+    'exp3.title': 'Web Development',
+    'exp3.desc': 'Fullstack development with Vue 3, Python/FastAPI, RESTful architectures and microservices. Focus on clean code, performance, application security and enterprise design systems.',
+    'exp4.title': 'Networking & Infrastructure',
+    'exp4.desc': 'Design and management of enterprise networks, firewall configuration, VPN, routing and switching. Traffic analysis, advanced troubleshooting and perimeter security.',
+    'exp5.title': 'Linux & Virtualization',
+    'exp5.desc': 'Advanced Linux administration (Kali, Ubuntu, Debian), management of virtualized VMware environments, headless server configuration, bash and systemd automation.',
+    'exp6.title': 'Automation & DevOps',
+    'exp6.desc': 'CI/CD pipelines, containerization with Docker, advanced Python scripting, integration of AI and LLM into business workflows, automation of SOC and development processes.',
+    'exp7.title': 'OSINT & Recon',
+    'exp7.desc': 'Open source reconnaissance, intelligence gathering, target footprinting, analysis of exposed digital assets. Specialized tools: subfinder, httpx, nuclei, theHarvester.',
+    'exp8.title': 'Reverse Engineering',
+    'exp8.desc': 'Binary analysis with x64dbg, disassembly, patching, understanding of proprietary formats and static malware analysis. Background in digital forensics and incident analysis.',
+    'tech.subtitle': 'The tools I work with every day, from frontend to offensive security.',
+    'contact.label': 'Contact',
+    'contact.title': "Let's talk about<br /><span style=\"color:var(--neon-cyan)\">a project.</span>",
+    'contact.subtitle': 'Available for collaborations in cybersecurity, web development and IT consulting. Reply within 24h.',
+    'contact.name.label': 'Name',
+    'contact.name.ph': 'Your name',
+    'contact.email.label': 'Email',
+    'contact.email.ph': 'your@email.com',
+    'contact.subject.label': 'Subject',
+    'contact.subject.ph': 'Collaboration / Consulting / Project',
+    'contact.msg.label': 'Message',
+    'contact.msg.ph': 'Briefly describe your project or request...',
+    'contact.submit': 'Send Message',
+    'contact.success': "\u2713 Message sent. I'll get back to you soon!",
+    'contact.channels': 'Direct channels',
+    'contact.github.sub': 'Open code & projects',
+    'contact.linkedin.sub': 'Professional profile',
+    'footer.copy': '\u00a9 2025 Gianfranco Lavoratti \u2014 Built with precision.',
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('#l-it, #l-it-mob').forEach(el => el.classList.toggle('l-active', lang === 'it'));
+  document.querySelectorAll('#l-en, #l-en-mob').forEach(el => el.classList.toggle('l-active', lang === 'en'));
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = i18n[lang][el.dataset.i18n];
+    if (v !== undefined) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const v = i18n[lang][el.dataset.i18nHtml];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = i18n[lang][el.dataset.i18nPh];
+    if (v !== undefined) el.placeholder = v;
+  });
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
 }
+
+function toggleLang() {
+  setLang(currentLang === 'it' ? 'en' : 'it');
+}
+
+(function() {
+  if (localStorage.getItem('lang') === 'en') setLang('en');
+})();
+
+/* ─── FORM ─── */
+async function handleFormSubmit(e) {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const btn = form.querySelector('button[type="submit"]');
+  const span = btn.querySelector('span');
+  const orig = span.textContent;
+  span.textContent = currentLang === 'en' ? 'Sending...' : 'Invio in corso...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/mwvybqwq', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      btn.style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+      form.reset();
+    } else {
+      span.textContent = orig;
+      btn.disabled = false;
+    }
+  } catch {
+    span.textContent = orig;
+    btn.disabled = false;
+  }
+}
+document.getElementById('contact-form').addEventListener('submit', handleFormSubmit);
 </script>
 </body>
 </html>
